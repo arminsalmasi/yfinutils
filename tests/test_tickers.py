@@ -131,5 +131,26 @@ class TestYahooFinanceTickers(unittest.TestCase):
         self.assertEqual(normalize_ticker("BHP", "AUSTRALIA"), "BHP.AX")
         self.assertEqual(normalize_ticker("SHOP", "TORONTO"), "SHOP.TO")
 
+    @patch("requests.get")
+    def test_search_tickers_mock(self, mock_get):
+        # Define mock search response
+        mock_response = MagicMock()
+        mock_response.json.return_value = {
+            "quotes": [
+                {"symbol": "VOLV-B.ST", "longname": "Volvo AB", "exchange": "STO", "exchDisp": "Stockholm", "quoteType": "EQUITY", "typeDisp": "Equity"},
+                {"symbol": "AAPL", "longname": "Apple Inc.", "exchange": "NMS", "exchDisp": "NASDAQ", "quoteType": "EQUITY", "typeDisp": "Equity"}
+            ]
+        }
+        mock_get.return_value = mock_response
+        
+        results = self.engine.search_tickers("Volvo")
+        
+        mock_get.assert_called_once()
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0]["symbol"], "VOLV-B.ST")
+        self.assertEqual(results[0]["name"], "Volvo AB")
+        self.assertEqual(results[0]["exchange_display"], "Stockholm")
+        self.assertEqual(results[1]["symbol"], "AAPL")
+
 if __name__ == "__main__":
     unittest.main()

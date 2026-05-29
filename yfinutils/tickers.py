@@ -451,6 +451,51 @@ class YahooFinanceTickers:
             return "India"
         return "Global"
 
+    def search_tickers(self, query: str, count: int = 15) -> List[Dict[str, Any]]:
+        """
+        Dynamically query Yahoo Finance's autocomplete/search API to find matching ticker symbols.
+        Can search by company name, ticker keyword, exchange, ISIN, etc.
+        """
+        if not query:
+            return []
+            
+        url = f"https://query2.finance.yahoo.com/v1/finance/search?q={query}&quotesCount={count}&newsCount=0"
+        
+        try:
+            import requests
+            response = requests.get(url, headers=DEFAULT_HEADERS, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            
+            quotes = data.get("quotes", [])
+            results = []
+            
+            for q in quotes:
+                symbol = q.get("symbol")
+                if not symbol:
+                    continue
+                    
+                # Clean up dots/slashes for US equities if they represent classes
+                quote_type = q.get("quoteType", "")
+                if quote_type == "EQUITY" and q.get("exchange") in ["NYQ", "NMS", "ASE"]:
+                    symbol = normalize_ticker(symbol, "SP500")
+                else:
+                    symbol = symbol.strip().upper()
+                    
+                results.append({
+                    "symbol": symbol,
+                    "name": q.get("longname") or q.get("shortname") or "",
+                    "exchange": q.get("exchange", ""),
+                    "exchange_display": q.get("exchDisp", ""),
+                    "type": quote_type,
+                    "type_display": q.get("typeDisp", "")
+                })
+                
+            return results
+        except Exception as e:
+            logger.error(f"Yahoo Finance search query failed for '{query}': {e}")
+            return []
+
     def register_suffix(self, index_code_or_market: str, suffix: str) -> None:
         """
         Register or update a Yahoo Finance exchange suffix for an index or market code.
@@ -460,4 +505,5 @@ class YahooFinanceTickers:
         """
         from yfinutils.utils import register_exchange_suffix
         register_exchange_suffix(index_code_or_market, suffix)
+        
         
