@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="yahoo-finance-tickers",
+    name="yfinutils",
     version="0.1.0",
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        "yahoo_finance_tickers": ["data/*.json"],
+        "yfinutils": ["data/*.json"],
     },
     install_requires=[
         "pandas>=2.0.0",

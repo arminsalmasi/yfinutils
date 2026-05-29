@@ -1,6 +1,6 @@
-# Yahoo Finance Tickers 🚀
+# yfinutils 🚀
 
-[![PyPI version](https://img.shields.io/pypi/v/yahoo-finance-tickers.svg)](https://pypi.org/project/yahoo-finance-tickers/)
+[![PyPI version](https://img.shields.io/pypi/v/yfinutils.svg)](https://pypi.org/project/yfinutils/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -13,7 +13,7 @@ It unifies the exhaustive index mapping of `pytickersymbols` with the simple dyn
 ## Key Features 🌟
 
 *   **⚡ Lightning-Fast Performance:** Integrated with an offline cache (`cached_indices.json`) loaded in microseconds, allowing instant lookup with **zero network requests**.
-*   **🌐 Broad Global Index Coverage:** Fully supports S&P 500, NASDAQ 100, Dow Jones, FTSE 100, FTSE 250, DAX, MDAX, SDAX, TecDAX, CAC 40, CAC Mid 60, AEX, BEL 20, Swiss Market Index (SMI 20), OMX Stockholm 30, OMX Helsinki 25, NIKKEI 225, Ibovespa, Nifty 50, and Nifty Bank.
+*   **🌐 Broad Global Index Coverage:** Fully supports S&P 500, NASDAQ 100, Dow Jones, FTSE 100, FTSE 250, DAX, MDAX, SDAX, TecDAX, CAC 40, CAC Mid 60, AEX, BEL 20, Swiss Market Index (SMI 20), OMX Stockholm 30, OMX Helsinki 25, NIKKEI 225, Ibovespa, and Nifty 50.
 *   **🛠️ Parallel Multi-threaded Scraping:** Live-scrapes multiple indices simultaneously in a thread pool using `ThreadPoolExecutor`—up to **8x faster** than sequential scrapers.
 *   **⚙️ Smart Exchange Suffix Normalization:** Automatically handles US ticker class naming (e.g. `BRK.B` -> `BRK-B`) and correctly appends exchange suffixes for international markets (e.g., `.L` for London, `.DE` for Frankfurt, `.SA` for Sao Paulo, `.NS` for India, `.T` for Tokyo).
 *   **🔌 Direct NASDAQ FTP Integration:** Download the entire universe of US listed stocks (NASDAQ, NYSE, AMEX, ARCA) directly from NASDAQ's FTP server.
@@ -23,10 +23,10 @@ It unifies the exhaustive index mapping of `pytickersymbols` with the simple dyn
 
 ## Installation 📦
 
-Install `yahoo-finance-tickers` from PyPI using pip:
+Install `yfinutils` from PyPI using pip:
 
 ```bash
-pip install yahoo-finance-tickers
+pip install yfinutils
 ```
 
 ---
@@ -37,7 +37,7 @@ pip install yahoo-finance-tickers
 Retrieve tickers in microseconds with no network traffic.
 
 ```python
-from yahoo_finance_tickers import YahooFinanceTickers
+from yfinutils import YahooFinanceTickers
 
 # Initialize the engine
 yft = YahooFinanceTickers()

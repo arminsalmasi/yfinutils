@@ -4,8 +4,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 import tempfile
 
-from yahoo_finance_tickers import YahooFinanceTickers, normalize_ticker
-from yahoo_finance_tickers.utils import INDEX_SUFFIX_MAP
+from yfinutils import YahooFinanceTickers, normalize_ticker
+from yfinutils.utils import INDEX_SUFFIX_MAP
 
 class TestYahooFinanceTickers(unittest.TestCase):
     
@@ -92,7 +92,7 @@ class TestYahooFinanceTickers(unittest.TestCase):
         
         self.assertEqual(tickers, ["AAPL", "BRK-B", "MSFT"])
 
-    @patch("yahoo_finance_tickers.tickers.parse_wikipedia_table")
+    @patch("yfinutils.tickers.parse_wikipedia_table")
     def test_scrape_index_mock(self, mock_parse):
         # Mock parser
         mock_parse.return_value = [
@@ -108,14 +108,14 @@ class TestYahooFinanceTickers(unittest.TestCase):
         self.assertEqual(ftse_meta[0]["country"], "United Kingdom")
         self.assertEqual(ftse_meta[1]["ticker"], "BP.L")
         
-    @patch("yahoo_finance_tickers.tickers.YahooFinanceTickers.scrape_index")
+    @patch("yfinutils.tickers.YahooFinanceTickers.scrape_index")
     def test_scrape_all_indices_concurrent(self, mock_scrape):
         mock_scrape.side_effect = lambda index: [{"name": "Mock", "ticker": f"MOCK.{index}"}]
         
         results = self.engine.scrape_all_indices(use_threads=True, max_workers=4)
         
         # Verify all index configs were processed
-        from yahoo_finance_tickers.tickers import INDEX_SCRAPE_CONFIG
+        from yfinutils.tickers import INDEX_SCRAPE_CONFIG
         self.assertEqual(len(results), len(INDEX_SCRAPE_CONFIG))
         self.assertIn("SP500", results)
         self.assertIn("DAX", results)

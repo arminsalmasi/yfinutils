@@ -6,7 +6,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Set, Union, Optional, Any
 
-from yahoo_finance_tickers.utils import (
+from yfinutils.utils import (
     normalize_ticker,
     parse_wikipedia_table,
     DEFAULT_HEADERS,
