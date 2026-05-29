@@ -121,5 +121,15 @@ class TestYahooFinanceTickers(unittest.TestCase):
         self.assertIn("DAX", results)
         self.assertEqual(results["DAX"], [{"name": "Mock", "ticker": "MOCK.DAX"}])
 
+    def test_dynamic_suffix_registration(self):
+        # Register a new custom suffix
+        self.engine.register_suffix("MY_NEW_EXCHANGE", ".NX")
+        self.assertEqual(normalize_ticker("TEST", "MY_NEW_EXCHANGE"), "TEST.NX")
+        
+        # Test standard newly added global suffix (e.g. Stockholm .ST, Canada .TO, Australia .AX)
+        self.assertEqual(normalize_ticker("ATCO-A", "STOCKHOLM"), "ATCO-A.ST")
+        self.assertEqual(normalize_ticker("BHP", "AUSTRALIA"), "BHP.AX")
+        self.assertEqual(normalize_ticker("SHOP", "TORONTO"), "SHOP.TO")
+
 if __name__ == "__main__":
     unittest.main()

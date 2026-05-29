@@ -450,3 +450,14 @@ class YahooFinanceTickers:
         elif index_name in ["NIFTY50", "NIFTYBANK"]:
             return "India"
         return "Global"
+
+    def register_suffix(self, index_code_or_market: str, suffix: str) -> None:
+        """
+        Register or update a Yahoo Finance exchange suffix for an index or market code.
+        Example:
+            yft.register_suffix("STOCKHOLM", ".ST")
+            yft.register_suffix("TOKYO", ".T")
+        """
+        from yfinutils.utils import register_exchange_suffix
+        register_exchange_suffix(index_code_or_market, suffix)
+        

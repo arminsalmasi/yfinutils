@@ -6,7 +6,7 @@ with the robust scraping/FTP interfaces of yahoo-fin to serve clean tickers in Y
 """
 
 from yfinutils.tickers import YahooFinanceTickers
-from yfinutils.utils import normalize_ticker
+from yfinutils.utils import normalize_ticker, register_exchange_suffix
 
 __version__ = "0.1.0"
-__all__ = ["YahooFinanceTickers", "normalize_ticker"]
+__all__ = ["YahooFinanceTickers", "normalize_ticker", "register_exchange_suffix"]
