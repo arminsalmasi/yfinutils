@@ -47,6 +47,6 @@ htmlcov/
 
 # Local data files
 *.json
-!yfinutils/data/cached_indices.json
+!yftickers/data/cached_indices.json
 *.txt
 *.csv
