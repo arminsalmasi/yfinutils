@@ -19,3 +19,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+### INSPIRATION & ACKNOWLEDGEMENTS
+
+This development is inspired by and incorporates concepts from the following open-source libraries:
+1. **yfinance** (https://github.com/ranaroussi/yfinance) - Licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0). Used as direct inspiration for historical stock price downloading and data formatting.
+2. **pytickersymbols** (https://github.com/0x8b/pytickersymbols) - Licensed under the MIT License. Used as direct inspiration for constituent tracking and index mapping capabilities.
+3. **yahoo-fin** (https://github.com/israel-dryer/yahoo-fin) - Licensed under the MIT License. Used as inspiration for raw scraping interfaces and symbol directory retrieval concepts.
+
+We respect and express gratitude to the authors of these libraries.
+

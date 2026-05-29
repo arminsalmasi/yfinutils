@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name="yftickers"
 version = "0.1.0"
 authors = [
-    { name = "Armin", email = "armin@example.com" }
+    { name = "Armin Salmasi", email = "arminsalmasi@gmail.com" }
 ]
 description = "A unified, optimized library for retrieving stock tickers across global indices and US markets in Yahoo Finance format with dynamic scraping, parallel requests, and offline caching."
 readme = "README.md"
@@ -27,3 +27,6 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/arminsalmasi/yfinutils"
 "Bug Tracker" = "https://github.com/arminsalmasi/yfinutils/issues"
+
+[tool.setuptools.packages.find]
+exclude = ["tests*", "tests"]

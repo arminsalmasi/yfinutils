@@ -135,6 +135,71 @@ Core engine class. If `cache_file_path` is omitted, uses the rich pre-compiled l
 
 ---
 
+## Optimized Historical Market Data Client 📊
+
+`yftickers` now supports robust historical stock market data downloading, featuring highly optimized connection pooling, automated rate-limit backing off, cookie/crumb synchronization, and concurrent batch fetching.
+
+### 1. Retrieve Single Ticker Data (Ticker API)
+Retrieve historical prices, dividend records, stock splits, and real-time quote metadata with the intuitive `Ticker` class.
+
+```python
+from yftickers import Ticker
+
+# Initialize the Ticker
+ticker = Ticker("AAPL")
+
+# Fetch 1 month of historical pricing at 1-day interval (OHLCV + Actions)
+hist = ticker.history(period="1mo", interval="1d", auto_adjust=True)
+print(hist.head())
+
+# Fetch fundamental & quote metadata dynamically
+info = ticker.info
+print(f"Company Name: {info.get('longName')} | Market Cap: {info.get('marketCap')}")
+
+# Fetch corporate actions (dividends and splits)
+print("Dividends history:")
+print(ticker.dividends.head())
+
+print("Stock Splits history:")
+print(ticker.splits.head())
+```
+
+### 2. High-Speed Bulk Concurrent Downloads
+Batch-fetch historical data for hundreds of stocks simultaneously using optimized thread pools and connection-pooled HTTP clients.
+
+```python
+import yftickers
+
+# Download S&P 500 constituents or a custom ticker set in parallel
+tickers = "AAPL MSFT GOOGL TSLA"
+data = yftickers.download(tickers, period="3mo", interval="1d", auto_adjust=True, progress=True)
+
+# The result is grouped by Metric with a Pandas MultiIndex (Metric -> Ticker)
+print(data["Close"].head())
+```
+
+---
+
+## Technical Optimizations ⚡
+
+Unlike standard libraries, `yftickers` is engineered from the ground up for high speed and robust resource utilization:
+1. **Persistent Connection Pooling:** Leverages a thread-safe global `requests.Session` mounted with connection-pooled adapters (`pool_connections=100`, `pool_maxsize=100`), reducing latency by reusing active TLS sockets during concurrent requests.
+2. **Robust Cookie & Crumb Resolution:** Employs an automated, cached, thread-locked cookie-consent and crumb fetching system mimicking real browser flows, mitigating unauthorized (`401`) and rate-limit (`429`) errors.
+3. **Adaptive Back-Off Retries:** Integrates automatic retry adapters that exponentially back off during rate limits or server degradation.
+
+---
+
+## Inspiration & Acknowledgements 💖
+
+This library builds upon, refines, and is inspired by the exceptional work of the following open-source financial packages:
+- **[yfinance](https://github.com/ranaroussi/yfinance)**: The standard-bearer Python library for Yahoo Finance. Our `Ticker` pricing, historical parsing, action alignments, and `download` structure are inspired by `yfinance`'s robust design. Developed under the permissive **Apache License 2.0**.
+- **[pytickersymbols](https://github.com/0x8b/pytickersymbols)**: An outstanding, exhaustive repository for global index components. The constituent index structures and maps are directly inspired by `pytickersymbols`' excellent layout. Licensed under the **MIT License**.
+- **[yahoo-fin](https://github.com/israel-dryer/yahoo-fin)**: A simple, user-friendly package for Yahoo Finance scraping. The core FTP direct integration concept and modular scraping flows draw inspiration from `yahoo-fin`. Licensed under the **MIT License**.
+
+We are deeply grateful to the authors and contributors of these libraries for their contributions to the Python financial ecosystem.
+
+---
+
 ## Developer Guide & Releasing 🛠️
 
 ### Running Tests
