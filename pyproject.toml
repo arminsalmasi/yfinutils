@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yahoo-finance-tickers"
+version = "0.1.0"
+authors = [
+    { name = "Armin", email = "armin@example.com" }
+]
+description = "A unified, optimized library for retrieving stock tickers across global indices and US markets in Yahoo Finance format with dynamic scraping, parallel requests, and offline caching."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Office/Business :: Financial :: Investment",
+    "Intended Audience :: Financial and Insurance Industry"
+]
+dependencies = [
+    "pandas>=2.0.0",
+    "requests>=2.30.0",
+    "lxml>=4.9.0"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/armin/yahoo-finance-tickers"
+"Bug Tracker" = "https://github.com/armin/yahoo-finance-tickers/issues"
