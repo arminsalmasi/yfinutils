@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from yfinutils import YahooFinanceTickers
-# Initialize the yfinutils engine
+from yftickers import YahooFinanceTickers
+# Initialize the yftickers engine
 yft = YahooFinanceTickers()
 # 1. Extract Stockholm (OMX 30) tickers
 stockholm_tickers = yft.get_tickers("OMX_STOCKHOLM")

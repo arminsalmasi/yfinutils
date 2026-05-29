@@ -6,7 +6,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Set, Union, Optional, Any
 
-from yfinutils.utils import (
+from yftickers.utils import (
     normalize_ticker,
     parse_wikipedia_table,
     DEFAULT_HEADERS,
@@ -503,7 +503,7 @@ class YahooFinanceTickers:
             yft.register_suffix("STOCKHOLM", ".ST")
             yft.register_suffix("TOKYO", ".T")
         """
-        from yfinutils.utils import register_exchange_suffix
+        from yftickers.utils import register_exchange_suffix
         register_exchange_suffix(index_code_or_market, suffix)
         
         

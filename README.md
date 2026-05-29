@@ -1,6 +1,6 @@
-# yfinutils 🚀
+# yftickers 🚀
 
-[![PyPI version](https://img.shields.io/pypi/v/yfinutils.svg)](https://pypi.org/project/yfinutils/)
+[![PyPI version](https://img.shields.io/pypi/v/yftickers.svg)](https://pypi.org/project/yftickers/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
@@ -23,10 +23,10 @@ It unifies the exhaustive index mapping of `pytickersymbols` with the simple dyn
 
 ## Installation 📦
 
-Install `yfinutils` from PyPI using pip:
+Install `yftickers` from PyPI using pip:
 
 ```bash
-pip install yfinutils
+pip install yftickers
 ```
 
 ---
@@ -37,7 +37,7 @@ pip install yfinutils
 Retrieve tickers in microseconds with no network traffic.
 
 ```python
-from yfinutils import YahooFinanceTickers
+from yftickers import YahooFinanceTickers
 
 # Initialize the engine
 yft = YahooFinanceTickers()
