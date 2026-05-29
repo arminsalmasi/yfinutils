@@ -47,6 +47,6 @@ htmlcov/
 
 # Local data files
 *.json
-!yahoo_finance_tickers/data/cached_indices.json
+!yfinutils/data/cached_indices.json
 *.txt
 *.csv
