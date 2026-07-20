@@ -86,7 +86,7 @@ class TestHistoricalData(unittest.TestCase):
         self.assertEqual(df["Stock Splits"].iloc[0], 4.0)
         
         # Verify index is localized to America/New_York
-        self.assertEqual(df.index.tz.zone, "America/New_York")
+        self.assertEqual(str(df.index.tz), "America/New_York")
 
     @patch("yftickers.session.YahooSessionManager.get_cookie_and_crumb")
     @patch("requests.Session.get")

@@ -189,6 +189,7 @@ class YahooFinanceTickers:
             
         self.cache_file_path = cache_file_path
         self._cached_data: Dict[str, Any] = {}
+        self._memoized_tickers: Dict[str, List[str]] = {}
         self._load_cache()
         
     def _load_cache(self) -> None:
@@ -219,6 +220,10 @@ class YahooFinanceTickers:
         """
         index_name = index_name.upper().strip()
         
+        # Check memoization cache to prevent redundant parsing and sorting
+        if not force_scrape and index_name in self._memoized_tickers:
+            return list(self._memoized_tickers[index_name]) # return copy to prevent mutation
+
         if force_scrape:
             try:
                 companies = self.scrape_index(index_name)
@@ -237,14 +242,19 @@ class YahooFinanceTickers:
                 # Add any alternate tickers
                 if c.get("other_tickers"):
                     tickers.extend(c["other_tickers"])
-            return sorted(list(set(tickers)))
+
+            result = sorted(list(set(tickers)))
+            self._memoized_tickers[index_name] = result
+            return list(result)
             
         # Fallback for Nifty Bank (hardcoded from yahoo-fin as there is no wiki table)
         if index_name == "NIFTYBANK":
             nb_tickers = ["AXISBANK.NS", "KOTAKBANK.NS", "HDFCBANK.NS", "SBIN.NS", "BANKBARODA.NS", 
                           "INDUSINDBK.NS", "PNB.NS", "IDFCFIRSTB.NS", "ICICIBANK.NS", "RBLBANK.NS", 
                           "FEDERALBNK.NS", "BANDHANBNK.NS"]
-            return sorted(nb_tickers)
+            result = sorted(nb_tickers)
+            self._memoized_tickers[index_name] = result
+            return list(result)
             
         raise ValueError(f"Index code '{index_name}' is not recognized or cached. Available indices: {self.get_available_indices()}")
 
