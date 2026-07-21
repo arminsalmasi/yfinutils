@@ -1,3 +1,6 @@
 ## 2025-02-19 - Index List Memoization
 **Learning:** `get_tickers` reads from the offline DB correctly, but without caching the parsed lists, we re-parse `.get("companies")`, iterate to extract tickers, `.extend()` them, and call `sorted(list(set(tickers)))` every single time it's called. When used repeatedly (e.g. for batch processing across the index), this turns a fast cache lookup into a CPU bottleneck taking over 5.5s for 5000 iterations.
 **Action:** Memoize standard parsed lists inside the class instance. This bypasses redundant list processing reducing time to 0.01s. Remember to return a copy or new list to avoid accidental side-effect mutations.
+## 2025-02-19 - DataFrame Nearest Indexing Loop Bottleneck
+**Learning:** Using `df.index.get_indexer([timestamp], method="nearest")[0]` inside a loop for inserting elements (like dividends or stock splits) performs a full index search repeatedly, causing a significant performance bottleneck (O(M*logN)).
+**Action:** Vectorize by collecting all target timestamps, converting them in bulk with `pd.to_datetime`, and performing a single `df.index.get_indexer(array, method="nearest")` to retrieve all mapping indices at once. Then use boolean masking and `.iloc` for bulk assignment.
