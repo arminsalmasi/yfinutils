@@ -206,7 +206,10 @@ def parse_wikipedia_table(url: str, column_mapping: Dict[str, List[str]], table_
     if "symbol" not in actual_columns:
         raise ValueError(f"Could not find symbol column in table. Mappings tried: {column_mapping.get('symbol')}")
         
-    for _, row in target_table.iterrows():
+    # OPTIMIZATION: Use to_dict("records") instead of iterrows() for iterating over DataFrame rows.
+    # to_dict("records") provides a ~10x speedup by converting the DataFrame into a list of lightweight dicts
+    # rather than creating a heavy Pandas Series object for every single row.
+    for row in target_table.to_dict("records"):
         symbol_val = row[actual_columns["symbol"]]
         if pd.isna(symbol_val):
             continue
