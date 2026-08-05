@@ -1,3 +1,6 @@
 ## 2025-02-19 - Index List Memoization
 **Learning:** `get_tickers` reads from the offline DB correctly, but without caching the parsed lists, we re-parse `.get("companies")`, iterate to extract tickers, `.extend()` them, and call `sorted(list(set(tickers)))` every single time it's called. When used repeatedly (e.g. for batch processing across the index), this turns a fast cache lookup into a CPU bottleneck taking over 5.5s for 5000 iterations.
 **Action:** Memoize standard parsed lists inside the class instance. This bypasses redundant list processing reducing time to 0.01s. Remember to return a copy or new list to avoid accidental side-effect mutations.
+## 2025-02-19 - DataFrame Mapping Vectorization
+**Learning:** Mapping time-series events (like corporate actions) to a Pandas DataFrame by iterating through the events and calling `get_indexer` followed by `iloc` on each iteration is extremely slow. For 10,000 dates and 1,000 dividend events, a standard Python loop takes ~1.25s, whereas extracting dates into a list, parsing once via `pd.to_datetime`, finding all indices via a single `get_indexer` call, and doing a single batch assignment reduces it to ~0.0026s.
+**Action:** When updating a Pandas DataFrame from an external dataset of time-aligned events, always use vectorized list extraction and batch `get_indexer` lookups to bypass Python looping overhead.
