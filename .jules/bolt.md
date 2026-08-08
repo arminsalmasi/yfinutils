@@ -1,3 +1,7 @@
 ## 2025-02-19 - Index List Memoization
 **Learning:** `get_tickers` reads from the offline DB correctly, but without caching the parsed lists, we re-parse `.get("companies")`, iterate to extract tickers, `.extend()` them, and call `sorted(list(set(tickers)))` every single time it's called. When used repeatedly (e.g. for batch processing across the index), this turns a fast cache lookup into a CPU bottleneck taking over 5.5s for 5000 iterations.
 **Action:** Memoize standard parsed lists inside the class instance. This bypasses redundant list processing reducing time to 0.01s. Remember to return a copy or new list to avoid accidental side-effect mutations.
+
+## 2025-02-19 - Vectorized Corporate Action Mapping
+**Learning:** `Ticker.history` uses a slow iterative approach for processing dividends and stock splits. It loops through every event, dynamically converting `pd.to_datetime` for each individual event, and using `df.index.get_indexer([event_time], method="nearest")[0]` inside the loop. This O(N*M) time complexity drastically slows down parsing for symbols with long dividend/split histories. In local tests with 50,000 days and 5,000 dividends/1,000 splits, it took ~7.7s.
+**Action:** When mapping time-series events (like corporate actions) to a Pandas DataFrame, use vectorized operations (e.g., passing a list of dates to `pd.to_datetime` followed by `get_indexer`) instead of iterating through events in a Python loop to avoid significant performance overhead.
