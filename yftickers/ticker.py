@@ -194,23 +194,44 @@ class Ticker:
             
             # Map dividends
             if dividends:
-                for div_item in dividends.values():
-                    div_time = pd.to_datetime(div_item["date"], unit="s").tz_localize("UTC").tz_convert(tz_name)
-                    # Align to closest date in the index or insert if needed
-                    # Find closest index position
-                    pos = df.index.get_indexer([div_time], method="nearest")[0]
-                    if pos != -1:
-                        df.iloc[pos, df.columns.get_loc("Dividends")] = float(div_item["amount"])
+                # Vectorized processing for dividends
+                div_dates = [item["date"] for item in dividends.values()]
+                div_amounts = [float(item["amount"]) for item in dividends.values()]
+
+                if div_dates:
+                    # Convert all timestamps at once
+                    div_times = pd.to_datetime(div_dates, unit="s").tz_localize("UTC").tz_convert(tz_name)
+                    # Get all indices at once
+                    positions = df.index.get_indexer(div_times, method="nearest")
+
+                    # Filter out valid positions (-1 means not found, but nearest shouldn't return -1 if index is not empty)
+                    # For safety, ensure positions are valid
+                    valid_mask = positions != -1
+                    if valid_mask.any():
+                        valid_positions = positions[valid_mask]
+                        valid_amounts = np.array(div_amounts)[valid_mask]
+                        # Use NumPy advanced indexing for assignment
+                        df.iloc[valid_positions, df.columns.get_loc("Dividends")] = valid_amounts
             
             # Map stock splits
             if splits:
-                for split_item in splits.values():
-                    split_time = pd.to_datetime(split_item["date"], unit="s").tz_localize("UTC").tz_convert(tz_name)
-                    pos = df.index.get_indexer([split_time], method="nearest")[0]
-                    if pos != -1:
-                        numerator = float(split_item.get("numerator", 1))
-                        denominator = float(split_item.get("denominator", 1))
-                        df.iloc[pos, df.columns.get_loc("Stock Splits")] = numerator / denominator
+                # Vectorized processing for stock splits
+                split_dates = [item["date"] for item in splits.values()]
+                split_ratios = [float(item.get("numerator", 1)) / float(item.get("denominator", 1)) for item in splits.values()]
+
+                if split_dates:
+                    # Convert all timestamps at once
+                    split_times = pd.to_datetime(split_dates, unit="s").tz_localize("UTC").tz_convert(tz_name)
+                    # Get all indices at once
+                    positions = df.index.get_indexer(split_times, method="nearest")
+
+                    # Filter out valid positions
+                    valid_mask = positions != -1
+                    if valid_mask.any():
+                        valid_positions = positions[valid_mask]
+                        valid_ratios = np.array(split_ratios)[valid_mask]
+                        # Use NumPy advanced indexing for assignment
+                        df.iloc[valid_positions, df.columns.get_loc("Stock Splits")] = valid_ratios
 
         # Apply auto adjustments if requested
         if auto_adjust and "Adj Close" in df.columns:
