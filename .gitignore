@@ -50,3 +50,5 @@ htmlcov/
 !yftickers/data/cached_indices.json
 *.txt
 *.csv
+
+.pypirc
